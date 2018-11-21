@@ -15,37 +15,39 @@ namespace OurChat.Hubs
         {
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
-        //static List<ChatUser> ConnectedUsers = new List<ChatUser>();
-        //static List<ChatMessage> CurrentMessage = new List<ChatMessage>();
-
-        //private readonly IMemberService _memberService;
-        //private readonly IConfiguration _configuration;
-
-        //public ChatHub (IMemberService memberService,
-        //    IConfiguration configuration)
-        //{
-        //    _memberService = memberService;
-        //    _configuration = configuration;
-        //}
-
-        //public void Connect(string userName)
-        //{
-        //    var id = Context.ConnectionId;
 
 
-        //    if (ConnectedUsers.Count(x => x.UniqueID == id) == 0)
-        //    {
-        //        string UserImg = "dummy-user.png"; //GetUserImage(userName);
-        //        string logintime = DateTime.Now.ToString();
+        static List<ChatUser> ConnectedUsers = new List<ChatUser>();
+        static List<ChatMessage> CurrentMessage = new List<ChatMessage>();
 
-        //        ConnectedUsers.Add(new ChatUser { UniqueID = id, UserName = userName, UserImage = UserImg, LoginTime = logintime });
-        //        // send to caller
-        //        Clients.Caller.SendAsync("onConnected", id, userName, ConnectedUsers, CurrentMessage);
+        private readonly IMemberService _memberService;
+        private readonly IConfiguration _configuration;
 
-        //        // send to all except caller client
-        //        Clients.AllExcept(id).SendAsync("onNewUserConnected", id, userName, UserImg, logintime);
-        //    }
-        //}
+        public ChatHub(IMemberService memberService,
+            IConfiguration configuration)
+        {
+            _memberService = memberService;
+            _configuration = configuration;
+        }
+
+        public void Connect(string userName)
+        {
+            var id = Context.ConnectionId;
+
+
+            if (ConnectedUsers.Count(x => x.UniqueID == id) == 0)
+            {
+                string UserImg = "dummy-user.png"; //GetUserImage(userName);
+                string logintime = DateTime.Now.ToString();
+
+                ConnectedUsers.Add(new ChatUser { UniqueID = id, UserName = userName, UserImage = UserImg, LoginTime = logintime });
+                // send to caller
+                Clients.Caller.SendAsync("onConnected", id, userName, ConnectedUsers, CurrentMessage);
+
+                // send to all except caller client
+                Clients.AllExcept(id).SendAsync("onNewUserConnected", id, userName, UserImg, logintime);
+            }
+        }
 
         //public void SendMessageToAll(string userName, string message, string time)
         //{
