@@ -10,7 +10,7 @@ using OurChat.Entities;
 namespace OurChat.Migrations
 {
     [DbContext(typeof(OurChatContext))]
-    [Migration("20181121131512_InitContext")]
+    [Migration("20181121140950_InitContext")]
     partial class InitContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,8 @@ namespace OurChat.Migrations
                     b.Property<string>("ResetCode");
 
                     b.Property<string>("Title");
+
+                    b.Property<string>("UniqueID");
 
                     b.HasKey("ID");
 

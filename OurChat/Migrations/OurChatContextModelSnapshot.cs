@@ -80,6 +80,8 @@ namespace OurChat.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<string>("UniqueID");
+
                     b.HasKey("ID");
 
                     b.ToTable("Members");

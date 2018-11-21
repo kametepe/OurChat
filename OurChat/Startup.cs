@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using OurChat.Entities;
+using OurChat.Hubs;
 using OurChat.Repositories;
 using OurChat.Repositories.Interfaces;
 using OurChat.Services;
@@ -42,7 +43,8 @@ namespace OurChat
             services.AddSingleton(Configuration);
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<IMemberService, MemberService>();
-           
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                          .AddCookie(options =>
                          {
@@ -62,17 +64,18 @@ namespace OurChat
             string connection = Configuration.GetConnectionString("OurChatConnection");
             services.AddDbContext<OurChatContext>
                 (options => options.UseSqlServer(connection));
-    
-        //services.Configure<CookiePolicyOptions>(options =>
-        //    {
-        //        // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-        //        options.CheckConsentNeeded = context => true;
-        //        options.MinimumSameSitePolicy = SameSiteMode.None;
-        //    });
+
+            //services.Configure<CookiePolicyOptions>(options =>
+            //    {
+            //        // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //        options.CheckConsentNeeded = context => true;
+            //        options.MinimumSameSitePolicy = SameSiteMode.None;
+            //    });
 
 
-        //   // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
- }
+            //   // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSignalR();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, OurChatContext db)
@@ -106,6 +109,11 @@ namespace OurChat
             });
 
             app.UseSession();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
 
             app.UseMvc(routes =>
             {

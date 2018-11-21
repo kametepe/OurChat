@@ -47,7 +47,8 @@ namespace OurChat.Migrations
                     ResetCode = table.Column<string>(nullable: true),
                     Position = table.Column<string>(nullable: true),
                     LoginAttempt = table.Column<int>(nullable: false),
-                    IsLocked = table.Column<bool>(nullable: false)
+                    IsLocked = table.Column<bool>(nullable: false),
+                    UniqueID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

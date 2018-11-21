@@ -80,12 +80,14 @@ public class Document
       public string Position { get; set; }
       public int LoginAttempt { get; set; }
       public bool IsLocked { get; set; }
+      public string UniqueID { get; set; }
 
         public Member()
       {
             CreationDate = DateTime.Now;
             LastLoginDate = CreationDate;
             LastPasswordChangedDate = CreationDate;
+            UniqueID = Guid.NewGuid().ToString();
       }
   }
  
