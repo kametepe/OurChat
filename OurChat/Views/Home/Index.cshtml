@@ -1035,17 +1035,23 @@
 
             }
             else {
-                Clist = $(
-                    '<li class="contact active">'+
-                     '   <div class="wrap">'+
-                     '       <span class="contact-status online"></span>'+
-                     '       <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />'+
-                     '       <div class="meta">' +
-                    '           <p class="name">' + name + '</p>' +
-                     '           <p class="preview"></p>' +
-                     '       </div>' +
-                     '   </div>' +
-                    '</li>');
+
+                if ($('#online_user_' + id).length) {
+                    // it exists
+                } else {
+                    Clist = $(
+                        '<li class="contact " id="online_user_' + id + '">' +
+                        '   <div class="wrap">' +
+                        '       <span class="contact-status online"></span>' +
+                        '       <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />' +
+                        '       <div class="meta">' +
+                        '           <p class="name">' + name + '</p>' +
+                        '           <p class="preview"></p>' +
+                        '       </div>' +
+                        '   </div>' +
+                        '</li>');
+            
+
 
                 //code = $('<div class="box-comment" id="Div' + id + '">' +
                 //    '<img class="img-circle img-sm" src="' + UserImage + '" alt="User Image" />' +
@@ -1089,6 +1095,7 @@
 
                 //});
                 $("#contacts ul").append(Clist);
+            }
             }
 
            // $("#divusers").append(code);

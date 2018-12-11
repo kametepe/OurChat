@@ -82,20 +82,20 @@ namespace OurChat.Hubs
         //    return RetimgName;
         //}
 
-        //public override async Task OnDisconnectedAsync(Exception exception)
-        //{
-        //    await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
-        //    var item = ConnectedUsers.FirstOrDefault(x => x.UniqueID == Context.ConnectionId);
-        //    if (item != null)
-        //    {
-        //        ConnectedUsers.Remove(item);
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+           // await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
+            var item = ConnectedUsers.FirstOrDefault(x => x.UniqueID == Context.ConnectionId);
+            if (item != null)
+            {
+                ConnectedUsers.Remove(item);
 
-        //        var id = Context.ConnectionId;
-        //        await Clients.All.SendAsync("onUserDisconnected", id, item.UserName);
+                var id = Context.ConnectionId;
+                await Clients.All.SendAsync("onUserDisconnected", id, item.UserName);
 
-        //    }
-        //    await base.OnDisconnectedAsync(exception);
-        //}
+            }
+            await base.OnDisconnectedAsync(exception);
+        }
 
         //public override async Task OnConnectedAsync()
         //{
