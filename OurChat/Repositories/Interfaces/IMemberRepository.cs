@@ -10,5 +10,6 @@ namespace OurChat.Repositories.Interfaces
 
         List<Member> GetAllMembers();
         Task<bool> UpdateMemberCredentials(string username, string password, string newpassword);
+        Member FindMemberByUniqueID(string memberUniqueID);
     }
 }

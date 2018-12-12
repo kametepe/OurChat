@@ -41,5 +41,11 @@ namespace OurChat.Repositories
             return rslt;
         }
 
+        public  Member FindMemberByUniqueID(string memberUniqueID)
+        {
+            var member =  _Context.Members.FirstOrDefault(m => m.UniqueID == memberUniqueID);
+            return member;
+        }
+
     }
 }

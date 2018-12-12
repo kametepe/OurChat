@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using OurChat.Entities;
 using OurChat.Models;
 using OurChat.Services.Interfaces;
 using System;
@@ -30,22 +31,29 @@ namespace OurChat.Hubs
             _configuration = configuration;
         }
 
-        public void Connect(string userName)
+        public void Connect(string memberUniqueID)
         {
             var id = Context.ConnectionId;
 
-
+            Member member = _memberService.FindMemberByUniqueID(memberUniqueID);
+            string fullname = string.Empty;
+            string mID = string.Empty;
+            if (member != null)
+            {
+                fullname = string.Concat(member.Title, " ", member.Fname, " ", member.Lname);
+                mID = member.UniqueID;
+            }
             if (ConnectedUsers.Count(x => x.UniqueID == id) == 0)
             {
                 string UserImg = "dummy-user.png"; //GetUserImage(userName);
                 string logintime = DateTime.Now.ToString();
 
-                ConnectedUsers.Add(new ChatUser { UniqueID = id, UserName = userName, UserImage = UserImg, LoginTime = logintime });
+                ConnectedUsers.Add(new ChatUser { UniqueID = id, UserName = fullname, UserImage = UserImg, LoginTime = logintime, ID = mID });
                 // send to caller
-                Clients.Caller.SendAsync("onConnected", id, userName, ConnectedUsers, CurrentMessage);
+                Clients.Caller.SendAsync("onConnected", id, fullname, ConnectedUsers, CurrentMessage, mID);
 
                 // send to all except caller client
-                Clients.AllExcept(id).SendAsync("onNewUserConnected", id, userName, UserImg, logintime);
+                Clients.AllExcept(id).SendAsync("onNewUserConnected", id, fullname, UserImg, logintime, mID);
             }
         }
 

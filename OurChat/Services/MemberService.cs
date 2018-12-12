@@ -38,5 +38,10 @@ namespace OurChat.Services
             return _repository.UpdateMemberCredentials(username, password, newpassword);
         }
 
+        public  Member FindMemberByUniqueID(string memberUniqueID)
+        {
+            return _repository.FindMemberByUniqueID(memberUniqueID);
+        }
+
     }
 }

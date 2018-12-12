@@ -10,5 +10,6 @@ namespace OurChat.Services.Interfaces
         Task<Member> FindMemberByMemberAsync(string username, string password);
         List<Member> GetAllMembers();
         Task<bool> UpdateMemberCredentials(string username, string password, string newpassword);
+        Member FindMemberByUniqueID(string memberUniqueID);
     }
 }

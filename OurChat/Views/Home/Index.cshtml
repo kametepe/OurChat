@@ -8,9 +8,11 @@
     var value = Context.Session.GetString(Constants.MemberSessionKey);
     var member = value == null ? default(Member) : JsonConvert.DeserializeObject<Member>(value);
     string fullname = string.Empty;
+    string memberID = string.Empty;
     if(member != null)
     {
         fullname = string.Concat(member.Title, " ", member.Fname, " ", member.Lname);
+        memberID = member.UniqueID;
 
     }
 
@@ -839,7 +841,7 @@
             <div id="profile">
                 <div class="wrap">
                     <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
-                    <p id="spn-nick-id" style="display:none"></p><p id="spn-nick">@fullname</p>
+                    <p id="spn-nick-id" style="display:none"></p><p id="spn-nick">@fullname</p><p id="mb-id" style="display:none">@memberID</p>
 
                     <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
                     <div id="status-options">
@@ -958,7 +960,7 @@
 
         function registerEvents(chatHub) {
 
-            var name = $('#spn-nick').text();
+            var name = $('#mb-id').text();
 
             if (name.length > 0) {
                 //chatHub.server.connect(name);
@@ -1011,12 +1013,12 @@
 
         }
 
-        function AddUser(chatHub, id, name, UserImage, date) {
+        function AddUser(chatHub, id, name, UserImage, date, mid) {
 
-            var userId = $('#spn-nick-id').val();
+            var userId = $('#mb-id').val();
 
             var code, Clist;
-            if (userId == id) {
+            if (userId == mid) {
 
                 //code = $('<div class="box-comment">' +
                 //    '<img class="img-circle img-sm" src="' + UserImage + '" alt="User Image" />' +
@@ -1036,11 +1038,11 @@
             }
             else {
 
-                if ($('#online_user_' + id).length) {
+                if ($('#online_user_' + mid).length) {
                     // it exists
                 } else {
                     Clist = $(
-                        '<li class="contact " id="online_user_' + id + '">' +
+                        '<li class="contact " id="online_user_' + mid + '">' +
                         '   <div class="wrap">' +
                         '       <span class="contact-status online"></span>' +
                         '       <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />' +
@@ -1144,7 +1146,7 @@
 
             // Calls when user successfully logged in
            // chatHub.client.onConnected = function (id, userName, allUsers, messages, times) {
-            chatHub.on("onConnected", function (id, userName, allUsers, messages, times) {
+            chatHub.on("onConnected", function (id, userName, allUsers, messages, times, mid) {
 
                 $('#spn-nick-id').val(id);
                 $('#spn-nick').val(userName);
@@ -1153,7 +1155,7 @@
                 // Add All Users
                 for (i = 0; i < allUsers.length; i++) {
 
-                    AddUser(chatHub, allUsers[i].uniqueID, allUsers[i].userName, allUsers[i].userImage, allUsers[i].loginTime);
+                    AddUser(chatHub, allUsers[i].uniqueID, allUsers[i].userName, allUsers[i].userImage, allUsers[i].loginTime, allUsers[i].id);
                 }
 
                 //// Add Existing Messages
@@ -1165,8 +1167,8 @@
 
             // On New User Connected
             //chatHub.client.onNewUserConnected = function (id, name, UserImage, loginDate) {
-            chatHub.on("onNewUserConnected", function (id, name, UserImage, loginDate) {
-                AddUser(chatHub, id, name, UserImage, loginDate);
+            chatHub.on("onNewUserConnected", function (id, name, UserImage, loginDate, mid) {
+                AddUser(chatHub, id, name, UserImage, loginDate, mid);
             });
 
             //// On User Disconnected
