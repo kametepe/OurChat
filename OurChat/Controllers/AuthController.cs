@@ -151,15 +151,7 @@ namespace OurChat.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home", null);
         }
-        private IEnumerable<Claim> GetUserClaims()
-        {
-            List<Claim> claims = new List<Claim>();
-
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, "200"));
-            claims.Add(new Claim(ClaimTypes.Name, "Manager"));
-            claims.Add(new Claim(ClaimTypes.Email, "manager@pca.ma"));
-            return claims;
-        }
+      
 
         private static bool IsUrlValid(string returnUrl)
         {
@@ -177,7 +169,10 @@ namespace OurChat.Controllers
                 new Claim(ClaimTypes.Surname, member.Lname),
                 new Claim(ClaimTypes.Email, member.Email, ClaimValueTypes.Email),
                 new Claim(ClaimTypes.Thumbprint, member.PicturePath),
-                new Claim("Position", member.Position)
+                new Claim("Position", member.Position),
+                new Claim("Title", member.Title),
+                new Claim("UniqueID", member.UniqueID)
+
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
