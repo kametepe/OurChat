@@ -875,11 +875,11 @@
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
-        <div class="content">
-            Welcome to the chat
+        <div class="content" id="messageboxarea">
+          <div id="user_messagebox_tmpl" style="display:none">
             <div class="contact-profile">
-                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                <p>Harvey Specter</p>
+                <img id="userImage" src="/images/chat/harveyspecter.png" alt="" />
+                <p id="userName">Harvey Specter</p>
                 <div class="social-media">
                     <i class="fa fa-facebook" aria-hidden="true"></i>
                     <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -896,7 +896,8 @@
                     <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
-        </div>
+         </div>
+      </div>
     </div>
     <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
     <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
@@ -1039,7 +1040,7 @@
                     // it exists
                 } else {
                     Clist = $(
-                        '<li class="contact " id="online_user_' + mid + '">' +
+                        '<li class="contact " id="online_user_' + mid + '" link="'+ mid +'">' +                       
                         '   <div class="wrap">' +
                         '       <span class="contact-status online"></span>' +
                         '       <img src="/images/chat/louislitt.png" alt="" />' +
@@ -1047,7 +1048,7 @@
                         '           <p class="name">' + name + '</p>' +
                         '           <p class="preview"></p>' +
                         '       </div>' +
-                        '   </div>' +
+                        '   </div>' +                        
                         '</li>');
 
 
@@ -1081,18 +1082,17 @@
 
                     //});
 
-                    //var link = $('<span class="contacts-list-name" id="' + id + '">');
-                    //$(Clist).click(function () {
+                    //var link = $('<span class="contacts-list-name" id="' + id + '">');                   
+                    $(Clist).click(function () {
 
-                    //    var id = $(link).attr('id');
+                        var id = $(this).attr('link');
 
-                    //    if (userId != id) {
-                    //        var ctrId = 'private_' + id;
-                    //        OpenPrivateChatBox(chatHub, id, ctrId, name);
+                        if (userId != mid) {
+                            var ctrId = 'user_messagebox_' + mid;                           
+                            OpenPrivateChatBox(chatHub, mid, ctrId, name);
+                        }
 
-                    //    }
-
-                    //});
+                    });
                     $("#contacts ul").append(Clist);
                 }
             }
@@ -1252,6 +1252,22 @@
 
         }
 
+
+        function OpenPrivateChatBox(chatHub, id, ctrId, name) {
+            var privatebox = $("#user_messagebox_tmpl").clone();
+            var $div = $(privatebox);
+
+            $div.attr('id', ctrId);
+           
+
+            $div.find("#userName").text(name);
+           
+           // $div.find("#userImage").
+
+            $div.css("display", "block");
+
+            $('#messageboxarea').append($div);
+        }
 //# sourceURL=pen.js
     </script>
 </body>
