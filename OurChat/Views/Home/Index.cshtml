@@ -1318,6 +1318,57 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
             }
            
         }
+
+
+        function OpenChatRoomBox(chatHub, id, ctrId, name, userImage) {
+
+            // Hide all
+            $("#messageboxarea").children().hide();
+
+            var $currentprivatediv = $('#PublicRoom');
+
+            if ($currentprivatediv.length) {
+                // show this one
+                $currentprivatediv.show();
+            } else {
+
+                var privatebox = $("#user_messagebox_tmpl").clone();
+                var $div = $(privatebox);
+
+                $div.attr('id', 'PublicRoom');
+
+
+                $div.find("#userName").text(" Public Room ");
+
+                $div.find("#userImage").attr("src", userImage);
+
+                // Send Button event in Private Chat
+                $div.find("#btnSendMessage").click(function () {
+
+                    $textBox = $div.find("#txtPrivateMessage");
+
+                    var msg = $textBox.val();
+                    if (msg.length > 0) {
+                        // chatHub.server.sendPrivateMessage(userId, msg);
+                        chatHub.invoke("sendPrivateMessage", id, msg);
+                        $textBox.val('');
+                    }
+                });
+
+                // Text Box event on Enter Button
+                $div.find("#txtPrivateMessage").keyup(function (e) {
+                    // console.log(" Key pressed " + e.which);
+                    if (e.keyCode == 13) {
+                        $div.find("#btnSendMessage").click();
+                    }
+                });
+
+                $div.css("display", "block");
+
+                $('#messageboxarea').append($div);
+            }
+
+        }
 //# sourceURL=pen.js
     </script>
 </body>

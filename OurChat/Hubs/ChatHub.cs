@@ -54,6 +54,9 @@ namespace OurChat.Hubs
 
                 // send to all except caller client
                 Clients.AllExcept(id).SendAsync("onNewUserConnected", id, fullname, UserImg, logintime, mID);
+
+                // register to Group 
+                Groups.AddToGroupAsync(id, "PublicRoom"); 
             }
         }
 
@@ -97,6 +100,9 @@ namespace OurChat.Hubs
             if (item != null)
             {
                 ConnectedUsers.Remove(item);
+
+                // remove from group
+                await Groups.RemoveFromGroupAsync(item.UniqueID, "PublicRoom");
 
                 var id = Context.ConnectionId;
                 await Clients.All.SendAsync("onUserDisconnected", id, item.UserName);
