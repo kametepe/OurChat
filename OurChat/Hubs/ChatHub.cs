@@ -45,7 +45,7 @@ namespace OurChat.Hubs
             }
             if (ConnectedUsers.Count(x => x.UniqueID == id) == 0)
             {
-                string UserImg = "dummy-user.png"; //GetUserImage(userName);
+                string UserImg = string.Concat("/images/chat/", member.PicturePath); //GetUserImage(userName);
                 string logintime = DateTime.Now.ToString();
 
                 ConnectedUsers.Add(new ChatUser { UniqueID = id, UserName = fullname, UserImage = UserImg, LoginTime = logintime, ID = mID });
@@ -122,14 +122,15 @@ namespace OurChat.Hubs
 
             if (toUser != null && fromUser != null)
             {
+                string senderID = fromUser.ID;
                 string CurrentDateTime = DateTime.Now.ToString();
                 // string UserImg = GetUserImage(fromUser.UserName);
-                string UserImg = string.Empty;
+                string UserImg = toUser.UserImage;
                 // send to 
-                Clients.Client(toUserId).SendAsync("sendPrivateMessage", fromUser.ID, fromUser.UserName, message, UserImg, CurrentDateTime);
+                Clients.Client(toUserId).SendAsync("sendPrivateMessage", fromUser.ID, fromUser.UserName, message, fromUser.UserImage, CurrentDateTime, fromUserId, senderID);
 
                 // send to caller user
-                Clients.Caller.SendAsync("sendPrivateMessage", toUser.ID, fromUser.UserName, message, UserImg, CurrentDateTime);
+                Clients.Caller.SendAsync("sendPrivateMessage", toUser.ID, fromUser.UserName, message, UserImg, CurrentDateTime, toUserId, senderID);
             }
 
         }

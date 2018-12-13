@@ -14,7 +14,10 @@
     var mFname = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
     var mLname = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
     string memberID = ident.Claims.FirstOrDefault(c => c.Type == "UniqueID")?.Value;
+    string memberPicture = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Thumbprint)?.Value;
+    
     string fullname = string.Concat(mTitle, " ", mFname, " ", mLname);
+
 
 
 }
@@ -841,7 +844,7 @@
         <div id="sidepanel">
             <div id="profile">
                 <div class="wrap">
-                    <img id="profile-img" src="/images/chat/mikeross.png" class="online" alt="" />
+                    <img id="profile-img" src="/images/chat/@memberPicture" class="online" alt="" />
                     <p id="spn-nick-id" style="display:none"></p><p id="spn-nick">@fullname</p><p id="mb-id" style="display:none">@memberID</p>
 
                     <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
@@ -1045,7 +1048,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
                         '<li class="contact " id="online_user_' + mid + '" link="'+ mid +'">' +                       
                         '   <div class="wrap">' +
                         '       <span class="contact-status online"></span>' +
-                        '       <img src="/images/chat/louislitt.png" alt="" />' +
+                        '       <img src="' + UserImage +'" alt="" />' +
                         '       <div class="meta">' +
                         '           <p class="name">' + name + '</p>' +
                         '           <p class="preview"></p>' +
@@ -1091,7 +1094,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
 
                         if (userId != mid) {
                             var ctrId = 'user_messagebox_' + mid;                           
-                            OpenPrivateChatBox(chatHub, id, ctrId, name);
+                            OpenPrivateChatBox(chatHub, id, ctrId, name, UserImage);
                         }
 
                     });
@@ -1207,13 +1210,13 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
 
 
             // chatHub.client.sendPrivateMessage = function (windowId, fromUserName, message, userimg, CurrentDateTime) {
-            chatHub.on("sendPrivateMessage", function (windowId, fromUserName, message, userimg, CurrentDateTime) {
+            chatHub.on("sendPrivateMessage", function (windowId, fromUserName, message, userimg, currentDateTime, toid, senderID) {
                 //var ctrId = 'private_' + windowId;
                 var ctrId = 'user_messagebox_' + windowId;  
                 var $currentprivatediv = $('#' + ctrId);
                 if ($currentprivatediv.length == 0) {
 
-                    OpenPrivateChatBox(chatHub, windowId, ctrId, fromUserName, userimg);
+                    OpenPrivateChatBox(chatHub, toid, ctrId, fromUserName, userimg);
 
                 }
 
@@ -1221,12 +1224,13 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
                 var CurrUserID = $('#mb-id').text();
                 var Side = 'right';
                 var TimeSide = 'left';
-                var messagedirection = 'replies';
-
-                if (CurrUserID == windowId) {
+                var messagedirection = 'sent';
+                var msgImage = $('#profile-img').attr('src');
+                if (senderID == windowId) {
                     Side = 'left';
                     TimeSide = 'right';
-                    messagedirection = 'sent';
+                    messagedirection = 'replies';
+                    msgImage = userimg;
                 }
                 else {
                 //    var Notification = 'New Message From ' + fromUserName;
@@ -1245,7 +1249,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
 
                 var $messagesection = $currentprivatediv.find('.messages ul');
 
-                $('<li class="' + messagedirection + '"><img src="/images/chat/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($messagesection);
+                $('<li class="' + messagedirection + '"><img src="' + msgImage +'" alt="" /><p>' + message + '</p></li>').appendTo($messagesection);
                 
                 //$('.contact.active .preview').html('<span>You: </span>' + message);
                 //connection.invoke("sendMessageToAll", user, message, date).catch(function (err) {
@@ -1275,7 +1279,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
         }
 
 
-        function OpenPrivateChatBox(chatHub, id, ctrId, name) {           
+        function OpenPrivateChatBox(chatHub, id, ctrId, name, userImage) {           
             // Hide all
             $("#messageboxarea").children().hide(); 
 
@@ -1294,7 +1298,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
 
                 $div.find("#userName").text(name);
 
-                // $div.find("#userImage").
+                $div.find("#userImage").attr("src", userImage);
 
                 // Send Button event in Private Chat
                 $div.find("#btnSendMessage").click(function () {
