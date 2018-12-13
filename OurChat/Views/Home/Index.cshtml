@@ -891,9 +891,9 @@
             </div>
             <div class="message-input">
                 <div class="wrap">
-                    <input type="text" placeholder="Write your message..." />
+                    <input type="text" placeholder="Write your message..." id="txtPrivateMessage" />
                     <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                    <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    <button class="submit" id="btnSendMessage"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
          </div>
@@ -951,8 +951,19 @@
 
 
         function GetCurrentDateTime(now) {
-
-            var localdate = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+            /*
+             new Date().getDate()          // Get the day as a number (1-31)
+new Date().getDay()           // Get the weekday as a number (0-6)
+new Date().getFullYear()      // Get the four digit year (yyyy)
+new Date().getHours()         // Get the hour (0-23)
+new Date().getMilliseconds()  // Get the milliseconds (0-999)
+new Date().getMinutes()       // Get the minutes (0-59)
+new Date().getMonth()         // Get the month (0-11)
+new Date().getSeconds()       // Get the seconds (0-59)
+new Date().getTime()          // Get the time (milliseconds since January 1, 1970)
+             
+             */ 
+            var localdate = now.getDay() + '/' + now.getMonth() + '/' + now.getFullYear() + '  ' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds(); //dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
             return localdate;
         }
 
@@ -998,16 +1009,7 @@
                 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
             };
 
-            $('.submit').click(function () {
-                newMessage();
-            });
-
-            $(window).on('keydown', function (e) {
-                if (e.which == 13) {
-                    newMessage();
-                    return false;
-                }
-            });
+           
 
         }
 
@@ -1085,11 +1087,11 @@
                     //var link = $('<span class="contacts-list-name" id="' + id + '">');                   
                     $(Clist).click(function () {
 
-                        var id = $(this).attr('link');
+                       // var id = $(this).attr('link');
 
                         if (userId != mid) {
                             var ctrId = 'user_messagebox_' + mid;                           
-                            OpenPrivateChatBox(chatHub, mid, ctrId, name);
+                            OpenPrivateChatBox(chatHub, id, ctrId, name);
                         }
 
                     });
@@ -1207,22 +1209,26 @@
             // chatHub.client.sendPrivateMessage = function (windowId, fromUserName, message, userimg, CurrentDateTime) {
             chatHub.on("sendPrivateMessage", function (windowId, fromUserName, message, userimg, CurrentDateTime) {
                 //var ctrId = 'private_' + windowId;
-                //if ($('#' + ctrId).length == 0) {
+                var ctrId = 'user_messagebox_' + windowId;  
+                var $currentprivatediv = $('#' + ctrId);
+                if ($currentprivatediv.length == 0) {
 
-                //    OpenPrivateChatBox(chatHub, windowId, ctrId, fromUserName, userimg);
+                    OpenPrivateChatBox(chatHub, windowId, ctrId, fromUserName, userimg);
 
-                //}
+                }
 
                 //var CurrUser = $('#hdUserName').val();
-                //var Side = 'right';
-                //var TimeSide = 'left';
+                var CurrUserID = $('#mb-id').text();
+                var Side = 'right';
+                var TimeSide = 'left';
+                var messagedirection = 'replies';
 
-                //if (CurrUser == fromUserName) {
-                //    Side = 'left';
-                //    TimeSide = 'right';
-
-                //}
-                //else {
+                if (CurrUserID == windowId) {
+                    Side = 'left';
+                    TimeSide = 'right';
+                    messagedirection = 'sent';
+                }
+                else {
                 //    var Notification = 'New Message From ' + fromUserName;
                 //    IntervalVal = setInterval("ShowTitleAlert('SignalR Chat App', '" + Notification + "')", 800);
 
@@ -1230,7 +1236,23 @@
                 //    msgcount++;
                 //    $('#' + ctrId).find('#MsgCountP').html(msgcount);
                 //    $('#' + ctrId).find('#MsgCountP').attr("title", msgcount + ' New Messages');
-                //}
+                }
+
+                
+
+                var user = $('#spn-nick').text();
+                var date = GetCurrentDateTime(new Date());
+
+                var $messagesection = $currentprivatediv.find('.messages ul');
+
+                $('<li class="' + messagedirection + '"><img src="/images/chat/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($messagesection);
+                
+                //$('.contact.active .preview').html('<span>You: </span>' + message);
+                //connection.invoke("sendMessageToAll", user, message, date).catch(function (err) {
+                //    return console.error(err.toString());
+                //});
+                event.preventDefault();
+                $currentprivatediv.find(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
                 //var divChatP = '<div class="direct-chat-msg ' + Side + '">' +
                 //    '<div class="direct-chat-info clearfix">' +
@@ -1253,20 +1275,53 @@
         }
 
 
-        function OpenPrivateChatBox(chatHub, id, ctrId, name) {
-            var privatebox = $("#user_messagebox_tmpl").clone();
-            var $div = $(privatebox);
+        function OpenPrivateChatBox(chatHub, id, ctrId, name) {           
+            // Hide all
+            $("#messageboxarea").children().hide(); 
 
-            $div.attr('id', ctrId);
+            var $currentprivatediv = $('#' + ctrId);
+
+            if ($currentprivatediv.length) {              
+                // show this one
+                $currentprivatediv.show();
+            } else {
+
+                var privatebox = $("#user_messagebox_tmpl").clone();
+                var $div = $(privatebox);
+
+                $div.attr('id', ctrId);
+
+
+                $div.find("#userName").text(name);
+
+                // $div.find("#userImage").
+
+                // Send Button event in Private Chat
+                $div.find("#btnSendMessage").click(function () {
+
+                    $textBox = $div.find("#txtPrivateMessage");
+
+                    var msg = $textBox.val();
+                    if (msg.length > 0) {
+                        // chatHub.server.sendPrivateMessage(userId, msg);
+                        chatHub.invoke("sendPrivateMessage", id, msg);
+                        $textBox.val('');
+                    }
+                });
+
+                // Text Box event on Enter Button
+                $div.find("#txtPrivateMessage").keyup(function (e) {
+                    // console.log(" Key pressed " + e.which);
+                    if (e.keyCode == 13) {
+                        $div.find("#btnSendMessage").click();
+                    }
+                });
+
+                $div.css("display", "block");
+
+                $('#messageboxarea').append($div);
+            }
            
-
-            $div.find("#userName").text(name);
-           
-           // $div.find("#userImage").
-
-            $div.css("display", "block");
-
-            $('#messageboxarea').append($div);
         }
 //# sourceURL=pen.js
     </script>

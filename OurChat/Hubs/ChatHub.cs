@@ -112,26 +112,27 @@ namespace OurChat.Hubs
         //}
 
 
-        //public void SendPrivateMessage(string toUserId, string message)
-        //{
+        public void SendPrivateMessage(string toUserId, string message)
+        {
 
-        //    string fromUserId = Context.ConnectionId;
+            string fromUserId = Context.ConnectionId;
 
-        //    var toUser = ConnectedUsers.FirstOrDefault(x => x.UniqueID == toUserId);
-        //    var fromUser = ConnectedUsers.FirstOrDefault(x => x.UniqueID == fromUserId);
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.UniqueID == toUserId);
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.UniqueID == fromUserId);
 
-        //    if (toUser != null && fromUser != null)
-        //    {
-        //        string CurrentDateTime = DateTime.Now.ToString();
-        //        string UserImg = GetUserImage(fromUser.UserName);
-        //        // send to 
-        //        Clients.Client(toUserId).SendAsync("sendPrivateMessage", fromUserId, fromUser.UserName, message, UserImg, CurrentDateTime);
+            if (toUser != null && fromUser != null)
+            {
+                string CurrentDateTime = DateTime.Now.ToString();
+                // string UserImg = GetUserImage(fromUser.UserName);
+                string UserImg = string.Empty;
+                // send to 
+                Clients.Client(toUserId).SendAsync("sendPrivateMessage", fromUser.ID, fromUser.UserName, message, UserImg, CurrentDateTime);
 
-        //        // send to caller user
-        //        Clients.Caller.SendAsync("sendPrivateMessage", toUserId, fromUser.UserName, message, UserImg, CurrentDateTime);
-        //    }
+                // send to caller user
+                Clients.Caller.SendAsync("sendPrivateMessage", toUser.ID, fromUser.UserName, message, UserImg, CurrentDateTime);
+            }
 
-        //}
+        }
 
     }
 }

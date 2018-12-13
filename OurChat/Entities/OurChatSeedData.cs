@@ -14,6 +14,8 @@ namespace OurChat.Entities
                  {
                     new Member { Title ="M", Fname ="Peter", Lname ="Gregor", Position = "Admin", Email ="petergregor@example.com", Password = Utilities.PasswordHelper.HashPassword("petergregor@example.com","letmein") , PicturePath ="petergregor.jpg", IsLive = true },
                     new Member { Title ="Mme", Fname ="Jessica", Lname ="Larson", Position = "Membre", Email ="ljessica@example.com", Password = Utilities.PasswordHelper.HashPassword("ljessica@example.com","letmein") , PicturePath ="ljessica.jpg", IsLive = true },
+                    new Member { Title ="M", Fname ="Han", Lname ="Solo", Position = "Membre", Email ="hansolo@example.com", Password = Utilities.PasswordHelper.HashPassword("hansolo@example.com","letmein") , PicturePath ="hansolo.jpg", IsLive = true },
+                    new Member { Title ="M", Fname ="Matthew", Lname ="John", Position = "Membre", Email ="mathhewjohn@example.com", Password = Utilities.PasswordHelper.HashPassword("mathhewjohn@example.com","letmein") , PicturePath ="mathhewjohn.jpg", IsLive = true },
                 };
 
                 db.Members.AddRange(members);
