@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/vendor/linearicons/style.css">
     <link rel="stylesheet" href="/assets/vendor/chartist/css/chartist-custom.css">
+    @RenderSection("HeaderStyles", false)
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
 
@@ -44,7 +45,7 @@
         <!-- NAVBAR -->
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="brand">
-                <a href="index.html"><img src="/assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+                <a href="/"><img src="/assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
             </div>
             <div class="container-fluid">
                 <div class="navbar-btn">
@@ -81,7 +82,7 @@
                                 <li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
                                 <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
                                 <li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
-                                <li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+                                <li><a href="/auth/logoff"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
                             </ul>
                         </li>
 

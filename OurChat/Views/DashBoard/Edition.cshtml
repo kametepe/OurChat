@@ -85,17 +85,56 @@ Text = "Monsieur"
             <div class="form-group">
                 <label for="signup-email" class="col-sm-3 control-label">IsLive*</label>
                 <div class="col-sm-9">
-                    <input asp-for="@Model.IsLive" type="checkbox"    >
+                    <input asp-for="@Model.IsLive" type="checkbox" class="js-switch">
 
                 </div>
             </div>
             <div class="form-group">
                 <label for="signup-email" class="col-sm-3 control-label">IsAdmin*</label>
                 <div class="col-sm-9">
-                    <input asp-for="@Model.IsAdmin" type="checkbox"   data-color="#99d683" data-secondary-color="#f96262"   data-switchery="true">
+                    <input asp-for="@Model.IsAdmin" type="checkbox" class="js-switch" data-color="#99d683" data-secondary-color="#f96262" data-switchery="true">
 
                 </div>
             </div>
+            <div class="form-group">
+
+                <div class="col-sm-9">
+                    <p><br></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signup-email" class="col-sm-3 control-label">Avatar</label>
+                <div class="col-sm-9">
+                    @for (int i = 0; i < 25; i++)
+                    {
+                        <div class="account">
+                            <div class="user">
+                                <img src="/images/chat/rachelzane.png" class="user-picture" alt="">
+                                <span class="position-number selection-hidden">1</span>
+                            </div>
+
+                        </div>
+
+                    }
+
+                    
+                    <div class="account">
+                        <div class="user">
+                            <img src="/images/chat/rachelzane.png" class="user-picture" alt="">
+                            <span class="position-number"><i class="fa fa-check"></i></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <div class="col-sm-9">
+                    <p><br></p>
+                </div>
+            </div>
+
 
             <button type="submit" class="btn btn-primary btn-lg btn-fullrounded center-block">
                 <i class="fa fa-check-circle"></i>
@@ -104,56 +143,108 @@ Text = "Monsieur"
         </form>
     </div>
 </div>
+<style>
 
-@section FooterScripts {
+    .account {
+        float: left;
+        padding-left: 5px;
+        padding-bottom: 5px;
+    }
 
- 
-    <script src="/assets/vendor/jquery/jquery.min.js"></script>
-    <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>    
-    <script src="/assets/vendor/jquery-ui/jquery-ui.min.js"></script>    
-    <script src="/assets/vendor/switchery/switchery.min.js"></script>
-    
-    <script>
-        $(function () {
-            /*-----------------------------------/
-                        /*	SWITCHERY
-                        /*----------------------------------*/
-            /* non jQuery way */
-            /*
-            var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-            elements.forEach(function(element) {
-                var switchSize = element.dataset.size;
-                if(switchSize === undefined ) switchSize: 'large'
-                var switchery = new Switchery(element, { size: switchSize });
-            });
-            */
-            var switchOptions = {},
-                switchColors = {
-                    'orange': '#F89B03',
-                    'purple': '#AB7DF6',
-                    'yellow': '#F3BB23',
-                    'red': '#ff4402',
-                    'blue': '#45AEEF'
-                }
-            $('.js-switch').each(function () {
-                if ($(this).data("size")) switchOptions.size = $(this).data("size");
-                var color = $(this).data("color");
-                if (switchColors[color] !== undefined) {
-                    switchOptions.color = switchColors[color];
-                }
-                else {
-                    switchOptions.color = color;
-                }
-                var switchery = new Switchery($(this)[0], switchOptions);
-                switchOptions = {};
-            });
-            $('#btn-check-click').on('click', function () {
-                alert($('#switch-check-click').prop('checked'));
-            });
-            $('#label-check-change').text($('#switch-check-change').prop('checked'));
-            $('#switch-check-change').on('change', function () {
-                $('#label-check-change').text($(this).prop('checked'));
-            });
-        });
-    </script>
+    .user {
+        float: left;
+        position: relative;
+    }
+
+    .account .user-picture {
+        border-color: #53c265;
+    }
+
+    .user-picture {
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        width: 55px;
+        height: 55px;
+        border: 2px solid transparent;
+    }
+
+    .user .position-number {
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        bottom: -6px;
+        right: -8px;
+        width: 28px;
+        height: 28px;
+        line-height: 22px;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        border: 2px solid #fff;
+        background-color: #0af;
+    }
+
+    .selection-hidden {
+        visibility: hidden;
+        display: none;
+    }
+</style>
+
+@section HeaderStyles {
+    <link rel="stylesheet" href="/assets/vendor/switchery/switchery.min.css">
 }
+    @section FooterScripts {
+
+
+        <script src="/assets/vendor/jquery/jquery.min.js"></script>
+        <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
+        <script src="/assets/vendor/switchery/switchery.min.js"></script>
+
+        <script>
+            $(function () {
+                /*-----------------------------------/
+                            /*	SWITCHERY
+                            /*----------------------------------*/
+                /* non jQuery way */
+                /*
+                var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+                elements.forEach(function(element) {
+                    var switchSize = element.dataset.size;
+                    if(switchSize === undefined ) switchSize: 'large'
+                    var switchery = new Switchery(element, { size: switchSize });
+                });
+                */
+                var switchOptions = {},
+                    switchColors = {
+                        'orange': '#F89B03',
+                        'purple': '#AB7DF6',
+                        'yellow': '#F3BB23',
+                        'red': '#ff4402',
+                        'blue': '#45AEEF'
+                    }
+                $('.js-switch').each(function () {
+                    if ($(this).data("size")) switchOptions.size = $(this).data("size");
+                    var color = $(this).data("color");
+                    if (switchColors[color] !== undefined) {
+                        switchOptions.color = switchColors[color];
+                    }
+                    else {
+                        switchOptions.color = color;
+                    }
+                    var switchery = new Switchery($(this)[0], switchOptions);
+                    switchOptions = {};
+                });
+                $('#btn-check-click').on('click', function () {
+                    alert($('#switch-check-click').prop('checked'));
+                });
+                $('#label-check-change').text($('#switch-check-change').prop('checked'));
+                $('#switch-check-change').on('change', function () {
+                    $('#label-check-change').text($(this).prop('checked'));
+                });
+            });
+        </script>
+    }
