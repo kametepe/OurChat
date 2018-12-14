@@ -8,9 +8,11 @@ namespace OurChat.Services.Interfaces
     {        
         Task<(bool, Member)> ValidateMemberCredentialsAsync(string username, string password);
         Task<Member> FindMemberByMemberAsync(string username, string password);
+        List<Member> GetAllLiveMembers();
         List<Member> GetAllMembers();
         Task<bool> UpdateMemberCredentials(string username, string password, string newpassword);
         Member FindMemberByUniqueID(string memberUniqueID);
+        Member GetMemberByID(int id);
         Member AddMember(Member member);
         Member UpdateMember(Member member);
     }

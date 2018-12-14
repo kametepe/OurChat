@@ -16,8 +16,12 @@ namespace OurChat.Models
         public string Lname { get; set; }
         public string PicturePath { get; set; }
         public bool IsLive { get; set; }
+        public bool IsLocked { get; set; }        
         public string Email { get; set; }
         public string Phone { get; set; }
+        public string Password { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmPassword { get; set; }
         public string Bio { get; set; }        
         public string Position { get; set; }
         public string UniqueID { get; set; }

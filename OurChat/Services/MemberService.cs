@@ -28,10 +28,22 @@ namespace OurChat.Services
         public async Task<Member> FindMemberByMemberAsync(string username, string password) => 
             await _repository.FindByMemberAsync(username, password);
 
+        public List<Member> GetAllLiveMembers()
+        {
+            return _repository.GetAllLiveMembers();
+        }
+
         public List<Member> GetAllMembers()
         {
             return _repository.GetAllMembers();
         }
+
+        public Member GetMemberByID(int id)
+        {
+            Member member = _repository.GetMemberByID(id);
+            return member;
+        }
+
 
         public Task<bool> UpdateMemberCredentials(string username, string password, string newpassword)
         {

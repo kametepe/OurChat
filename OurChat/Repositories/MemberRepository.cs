@@ -23,7 +23,12 @@ namespace OurChat.Repositories
 
         public List<Member> GetAllMembers()
         {
-            return  _Context.Members.Where(m => m.IsLive == true).ToList<Member>();
+            return  _Context.Members.ToList<Member>();
+        }
+
+        public List<Member> GetAllLiveMembers()
+        {
+            return _Context.Members.Where(m => m.IsLive == true).ToList<Member>();
         }
         public async Task<bool> UpdateMemberCredentials(string username, string password, string newpassword)
         {
@@ -47,6 +52,12 @@ namespace OurChat.Repositories
             return member;
         }
 
+        public Member GetMemberByID(int id)
+        {
+            var member = _Context.Members.FirstOrDefault(m => m.ID == id);
+            return member;
+        }
+
         public Member AddMember(Member member)
         {
             _Context.Members.Add(member);
@@ -65,6 +76,7 @@ namespace OurChat.Repositories
                 existingMember.Fname = member.Fname;
                 existingMember.Lname = member.Lname;
                 existingMember.IsLive = member.IsLive;
+                existingMember.IsAdmin = member.IsAdmin;
                 existingMember.Position = member.Position;
                 existingMember.Email = member.Email;
                

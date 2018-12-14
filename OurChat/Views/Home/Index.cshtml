@@ -5,9 +5,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @using System.Security.Claims;
 @{
-    Layout = "~/Views/Shared/_ChatLayout.cshtml";
-    var value = Context.Session.GetString(Constants.MemberSessionKey);
-    var member = value == null ? default(Member) : JsonConvert.DeserializeObject<Member>(value);
+    Layout = "~/Views/Shared/_ChatLayout.cshtml";  
 
     var ident = Context.User.Identity as ClaimsIdentity;
     var mTitle = ident.Claims.FirstOrDefault(c => c.Type == "Title")?.Value;

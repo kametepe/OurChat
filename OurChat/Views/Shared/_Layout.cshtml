@@ -1,4 +1,23 @@
-﻿<!doctype html>
+﻿@using Newtonsoft.Json;
+@using OurChat.Common;
+@using OurChat.Entities;
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using System.Security.Claims;
+@{
+    var ident = Context.User.Identity as ClaimsIdentity;
+    var mTitle = ident.Claims.FirstOrDefault(c => c.Type == "Title")?.Value;
+    var mFname = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+    var mLname = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+    string memberID = ident.Claims.FirstOrDefault(c => c.Type == "UniqueID")?.Value;
+    string memberPicture = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Thumbprint)?.Value;
+
+    string fullname = string.Concat(mTitle, " ", mFname, " ", mLname);
+
+
+
+}
+<!doctype html>
 <html lang="en">
 <head>
     <title>Dashboard | Klorofil - Free Bootstrap Dashboard Template</title>
@@ -12,8 +31,7 @@
     <link rel="stylesheet" href="/assets/vendor/chartist/css/chartist-custom.css">
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
-    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
-    <link rel="stylesheet" href="/assets/css/demo24.css">
+
     <!-- GOOGLE FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
     <!-- ICONS -->
@@ -38,7 +56,7 @@
                         <span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
                     </div>
                 </form>
-                
+
                 <div id="navbar-menu">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
@@ -46,7 +64,7 @@
                                 <i class="lnr lnr-alarm"></i>
                                 <span class="badge bg-danger">5</span>
                             </a>
-                            
+
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-question-circle"></i> <span>Help</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
@@ -58,7 +76,7 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/assets/img/user.png" class="img-circle" alt="Avatar"> <span>Samuel</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/images/chat/@memberPicture" class="img-circle" alt="Avatar"> <span>@fullname</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
                                 <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
@@ -66,7 +84,7 @@
                                 <li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
                             </ul>
                         </li>
-                       
+
                     </ul>
                 </div>
             </div>
@@ -78,9 +96,9 @@
                 <nav>
                     <ul class="nav">
                         <li><a href="/Dashboard" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
-                     
+
                         <li><a href="/Settings" class=""><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
-                        
+
                     </ul>
                 </nav>
             </div>
