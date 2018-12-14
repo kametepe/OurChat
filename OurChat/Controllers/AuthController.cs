@@ -174,6 +174,12 @@ namespace OurChat.Controllers
                 new Claim("UniqueID", member.UniqueID)
 
             };
+
+            if (member.IsAdmin)
+            {
+                claims.Add(new Claim("IsAdministrator", member.ID.ToString()));
+            }
+
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(principal);

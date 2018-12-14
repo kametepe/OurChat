@@ -52,15 +52,19 @@ namespace OurChat
                              options.ExpireTimeSpan = TimeSpan.FromDays(1);
                              options.LoginPath = "/Auth/Login";
                              options.LogoutPath = "/Auth/LogOff";
+                             options.AccessDeniedPath = "/Auth/AccessDenied";
                          });
 
 
 
             services.AddMvc();
 
-
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("IsAdministrator"));
+            });
             //services.AddAntiforgery(opts => opts.Cookie.Name = "jagbiscuit");
- 
+
             string connection = Configuration.GetConnectionString("OurChatConnection");
             services.AddDbContext<OurChatContext>
                 (options => options.UseSqlServer(connection));

@@ -42,6 +42,15 @@ namespace OurChat.Services
         {
             return _repository.FindMemberByUniqueID(memberUniqueID);
         }
+        public Member AddMember(Member member)
+        {
+            return _repository.AddMember(member);
+        }
+
+        public Member UpdateMember(Member member)
+        {
+            return _repository.UpdateMember(member);
+        }
 
     }
 }

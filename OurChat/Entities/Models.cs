@@ -81,6 +81,9 @@ public class Document
       public int LoginAttempt { get; set; }
       public bool IsLocked { get; set; }
       public string UniqueID { get; set; }
+      public bool IsAdmin { get; set; }
+      public byte[] Picture { get; set; }
+      public string PicType { get; set; }
 
         public Member()
       {

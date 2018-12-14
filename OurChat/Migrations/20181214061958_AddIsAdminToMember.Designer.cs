@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurChat.Entities;
 
 namespace OurChat.Migrations
 {
     [DbContext(typeof(OurChatContext))]
-    partial class OurChatContextModelSnapshot : ModelSnapshot
+    [Migration("20181214061958_AddIsAdminToMember")]
+    partial class AddIsAdminToMember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,10 +75,6 @@ namespace OurChat.Migrations
                     b.Property<int>("LoginAttempt");
 
                     b.Property<string>("Password");
-
-                    b.Property<string>("PicType");
-
-                    b.Property<byte[]>("Picture");
 
                     b.Property<string>("PicturePath");
 

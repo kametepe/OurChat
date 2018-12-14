@@ -47,5 +47,38 @@ namespace OurChat.Repositories
             return member;
         }
 
+        public Member AddMember(Member member)
+        {
+            _Context.Members.Add(member);
+            _Context.SaveChanges();
+
+            return member;
+        }        
+
+        public Member UpdateMember(Member member)
+        {
+            Member existingMember = _Context.Members.FirstOrDefault(m => m.ID == member.ID);
+            if (existingMember != null)
+            {
+              
+                existingMember.Title = member.Title;
+                existingMember.Fname = member.Fname;
+                existingMember.Lname = member.Lname;
+                existingMember.IsLive = member.IsLive;
+                existingMember.Position = member.Position;
+                existingMember.Email = member.Email;
+               
+                if (member.Picture != null)
+                {
+                    existingMember.Picture = member.Picture;
+                    existingMember.PicType = member.PicType;
+                }
+                existingMember.UniqueID = member.UniqueID;                
+                _Context.SaveChanges();
+            }
+            return member;
+        }
+
+
     }
 }

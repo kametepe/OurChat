@@ -12,7 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Auth\AccessDenied.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Auth\Login.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\DashBoard\Edition.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_Layout.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Shared\_Login.cshtml">

@@ -5,7 +5,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @using System.Security.Claims;
 @{
-
+    Layout = "~/Views/Shared/_ChatLayout.cshtml";
     var value = Context.Session.GetString(Constants.MemberSessionKey);
     var member = value == null ? default(Member) : JsonConvert.DeserializeObject<Member>(value);
 
@@ -15,7 +15,7 @@
     var mLname = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
     string memberID = ident.Claims.FirstOrDefault(c => c.Type == "UniqueID")?.Value;
     string memberPicture = ident.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Thumbprint)?.Value;
-    
+
     string fullname = string.Concat(mTitle, " ", mFname, " ", mLname);
 
 
@@ -1204,7 +1204,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
                 var $currentprivatediv = $('#' + ctrId);
                 if ($currentprivatediv.length == 0) {
 
-                    OpenPrivateChatBox(chatHub, toid, ctrId, fromUserName, userimg);
+                    OpenPrivateChatBox(chatHub, toid, ctrId, fromUserName, userimg, message);
 
                 }
 
@@ -1246,8 +1246,8 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
                 //connection.invoke("sendMessageToAll", user, message, date).catch(function (err) {
                 //    return console.error(err.toString());
                 //});
-                event.preventDefault();
-                $currentprivatediv.find(".messages").animate({ scrollTop: $(document).height() }, "fast");
+               // event.preventDefault();
+               // $currentprivatediv.find(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
                 //var divChatP = '<div class="direct-chat-msg ' + Side + '">' +
                 //    '<div class="direct-chat-info clearfix">' +
@@ -1270,7 +1270,7 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
         }
 
 
-        function OpenPrivateChatBox(chatHub, id, ctrId, name, userImage) {           
+        function OpenPrivateChatBox(chatHub, id, ctrId, name, userImage, message) {           
             // Hide all
             $("#messageboxarea").children().hide(); 
 
@@ -1313,6 +1313,13 @@ new Date().getTime()          // Get the time (milliseconds since January 1, 197
                 });
 
                 $div.css("display", "block");
+
+                if (message) {
+
+                    var $messagesection = $div.find('.messages ul');
+                    $('<li class="replies"><img src="' + userImage + '" alt="" /><p>' + message + '</p></li>').appendTo($messagesection);
+
+                }
 
                 $('#messageboxarea').append($div);
             }
