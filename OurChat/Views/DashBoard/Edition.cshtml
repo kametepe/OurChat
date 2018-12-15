@@ -102,18 +102,21 @@ Text = "Monsieur"
                     <div class="account">
                         <div class="user">
                             <img src="/images/chat/avatar/@Model.Avatars[i].PicturePath" class="user-picture" alt="">
-                            @if (Model.Avatars[i].Selected)
+                            @if (Model.PicturePath == Model.Avatars[i].PicturePath)
                             {
 
                                 <span class="position-number"><i class="fa fa-check"></i></span>
+                                <input type="radio" id="rdb-@Model.Avatars[i].PicturePath" name="PicturePath" value="@Model.Avatars[i].PicturePath" checked />
+
                             }
                             else
                             {
-                                <span class="position-number selection-hidden"></span>
+                                <span class="position-number selection-hidden"><i class="fa fa-check"></i></span>
+                                <input type="radio" id="rdb-@Model.Avatars[i].PicturePath" name="PicturePath" value="@Model.Avatars[i].PicturePath" />
+
                             }
                         </div>
-                        <input type="checkbox" asp-for="@Model.Avatars[i].Selected" />                     
-                        <input type="hidden" asp-for="@Model.Avatars[i].PicturePath" />
+                        
                     </div>
                         
                     }
@@ -151,9 +154,13 @@ Text = "Monsieur"
     }
 
     .account .user-picture {
-        border-color: #53c265;
+        border-color: #676a6d;
     }
 
+    .account .user-picture-selected {
+        border-color: #00AAFF !important;
+    }
+    
     .user-picture {
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
@@ -185,6 +192,14 @@ Text = "Monsieur"
         visibility: hidden;
         display: none;
     }
+
+    .account input[type="radio"] {
+        display: none;
+    }
+
+    .image-checkbox-checked {
+        border-color: #99d683;
+    }
 </style>
 
 @section HeaderStyles {
@@ -200,6 +215,37 @@ Text = "Monsieur"
 
     <script>
         $(function () {
+
+            $(".account").each(function () {
+                if ($(this).find('input[type="radio"]').first().attr("checked")) {
+                    $(this).find('.position-number').removeClass('selection-hidden');                     
+                }
+                else {
+                    $(this).find('.position-number').addClass('selection-hidden');
+                     
+                }
+            });
+
+            // sync the state to the input
+            $(".account").on("click", function (e) {
+                $(this).find('.position-number').toggleClass('selection-hidden');
+                var $checkbox = $(this).find('input[type="radio"]');
+                $checkbox.prop("checked", !$checkbox.prop("checked"));
+                 
+                e.preventDefault();
+
+                $(".account").each(function () {
+                    if ($(this).find('input[type="radio"]').first().is(':checked')) {
+                        $(this).find('.position-number').removeClass('selection-hidden');
+                        $(this).find('.user-picture').addClass('user-picture-selected');
+                    }
+                    else {
+                        $(this).find('.position-number').addClass('selection-hidden');
+                        $(this).find('.user-picture').removeClass('user-picture-selected');
+
+                    }
+                });
+            });
             /*-----------------------------------/
                         /*	SWITCHERY
                         /*----------------------------------*/

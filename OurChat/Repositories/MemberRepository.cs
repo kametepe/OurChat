@@ -79,12 +79,9 @@ namespace OurChat.Repositories
                 existingMember.IsAdmin = member.IsAdmin;
                 existingMember.Position = member.Position;
                 existingMember.Email = member.Email;
-               
-                if (member.Picture != null)
-                {
-                    existingMember.Picture = member.Picture;
-                    existingMember.PicType = member.PicType;
-                }
+                existingMember.PicturePath = member.PicturePath;
+
+                
                 existingMember.UniqueID = member.UniqueID;                
                 _Context.SaveChanges();
             }

@@ -57,7 +57,7 @@ namespace OurChat.Controllers
                 {
                     position = "Admin";
                 }
-                Member newMember = new Member() { Title = model.Title, Fname = model.Fname, Lname = model.Lname, IsLive = model.IsLive, IsAdmin = model.IsAdmin, Email = model.Email, Position = position, PicturePath = "dummy-user.png" };
+                Member newMember = new Member() { Title = model.Title, Fname = model.Fname, Lname = model.Lname, IsLive = model.IsLive, IsAdmin = model.IsAdmin, Email = model.Email, Position = position, PicturePath = model.PicturePath };
                 newMember.Password = Utilities.PasswordHelper.HashPassword(model.Email, model.Password);
                 if (model.Picture != null && model.Picture.Length != 0 && model.Picture.Length < 10485761)
                 {
@@ -118,7 +118,7 @@ namespace OurChat.Controllers
                 {
                     position = "Admin";
                 }
-                Member newUser = new Member() { ID = model.ID, Title = model.Title, Fname = model.Fname, Lname = model.Lname, IsLive = model.IsLive, IsAdmin = model.IsAdmin, Email = model.Email, Position = position };
+                Member newUser = new Member() { ID = model.ID, Title = model.Title, Fname = model.Fname, Lname = model.Lname, IsLive = model.IsLive, IsAdmin = model.IsAdmin, Email = model.Email, Position = position, PicturePath = model.PicturePath };
 
                 if (!string.IsNullOrEmpty(model.Password) && (model.Password == model.ConfirmPassword))
                 {
