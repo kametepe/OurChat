@@ -1,4 +1,6 @@
-﻿@model MemberEditionViewModel
+﻿@using System.IO;
+@model MemberEditionViewModel
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
 @{
     ViewData["Title"] = "Edit";
     string actioname = "Create";
@@ -31,8 +33,11 @@ Text = "Monsieur"
         string img64 = Convert.ToBase64String(Model.ExistingPicture);
         imgUrl = string.Format("data:" + Model.PicType + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
     }
-
-
+    string avatarPath = string.Concat(hostingEnv.ContentRootPath, "\\wwwroot\\images\\chat\\avatar");
+   // string[] fileArray = System.IO.Directory.GetFiles(avatarPath, "*.png", System.IO.SearchOption.AllDirectories);
+    DirectoryInfo d = new DirectoryInfo(avatarPath);//Assuming Test is your Folder
+    FileInfo[] Files = d.GetFiles("*.png"); //Getting Text files
+    int avatarSelectionCounter = 0;
 }
 
 
@@ -105,26 +110,28 @@ Text = "Monsieur"
             <div class="form-group">
                 <label for="signup-email" class="col-sm-3 control-label">Avatar</label>
                 <div class="col-sm-9">
-                    @for (int i = 0; i < 25; i++)
+                    @foreach (FileInfo file in Files)
                     {
-                        <div class="account">
-                            <div class="user">
-                                <img src="/images/chat/rachelzane.png" class="user-picture" alt="">
-                                <span class="position-number selection-hidden">1</span>
-                            </div>
-
-                        </div>
-
-                    }
-
-                    
+                                    
                     <div class="account">
                         <div class="user">
-                            <img src="/images/chat/rachelzane.png" class="user-picture" alt="">
-                            <span class="position-number"><i class="fa fa-check"></i></span>
+                            <img src="/images/chat/avatar/@file.Name" class="user-picture" alt="">
+                            @if (avatarSelectionCounter == 0)
+                            {
+
+                                <span class="position-number"><i class="fa fa-check"></i></span>
+                            }
+                            else
+                            {
+                                <span class="position-number selection-hidden"></span>
+                            }
                         </div>
 
                     </div>
+                        avatarSelectionCounter++;
+                    }
+
+ 
                 </div>
             </div>
 
@@ -196,55 +203,55 @@ Text = "Monsieur"
 @section HeaderStyles {
     <link rel="stylesheet" href="/assets/vendor/switchery/switchery.min.css">
 }
-    @section FooterScripts {
+@section FooterScripts {
 
 
-        <script src="/assets/vendor/jquery/jquery.min.js"></script>
-        <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
-        <script src="/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/assets/vendor/switchery/switchery.min.js"></script>
 
-        <script>
-            $(function () {
-                /*-----------------------------------/
-                            /*	SWITCHERY
-                            /*----------------------------------*/
-                /* non jQuery way */
-                /*
-                var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-                elements.forEach(function(element) {
-                    var switchSize = element.dataset.size;
-                    if(switchSize === undefined ) switchSize: 'large'
-                    var switchery = new Switchery(element, { size: switchSize });
-                });
-                */
-                var switchOptions = {},
-                    switchColors = {
-                        'orange': '#F89B03',
-                        'purple': '#AB7DF6',
-                        'yellow': '#F3BB23',
-                        'red': '#ff4402',
-                        'blue': '#45AEEF'
-                    }
-                $('.js-switch').each(function () {
-                    if ($(this).data("size")) switchOptions.size = $(this).data("size");
-                    var color = $(this).data("color");
-                    if (switchColors[color] !== undefined) {
-                        switchOptions.color = switchColors[color];
-                    }
-                    else {
-                        switchOptions.color = color;
-                    }
-                    var switchery = new Switchery($(this)[0], switchOptions);
-                    switchOptions = {};
-                });
-                $('#btn-check-click').on('click', function () {
-                    alert($('#switch-check-click').prop('checked'));
-                });
-                $('#label-check-change').text($('#switch-check-change').prop('checked'));
-                $('#switch-check-change').on('change', function () {
-                    $('#label-check-change').text($(this).prop('checked'));
-                });
+    <script>
+        $(function () {
+            /*-----------------------------------/
+                        /*	SWITCHERY
+                        /*----------------------------------*/
+            /* non jQuery way */
+            /*
+            var elements = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            elements.forEach(function(element) {
+                var switchSize = element.dataset.size;
+                if(switchSize === undefined ) switchSize: 'large'
+                var switchery = new Switchery(element, { size: switchSize });
             });
-        </script>
-    }
+            */
+            var switchOptions = {},
+                switchColors = {
+                    'orange': '#F89B03',
+                    'purple': '#AB7DF6',
+                    'yellow': '#F3BB23',
+                    'red': '#ff4402',
+                    'blue': '#45AEEF'
+                }
+            $('.js-switch').each(function () {
+                if ($(this).data("size")) switchOptions.size = $(this).data("size");
+                var color = $(this).data("color");
+                if (switchColors[color] !== undefined) {
+                    switchOptions.color = switchColors[color];
+                }
+                else {
+                    switchOptions.color = color;
+                }
+                var switchery = new Switchery($(this)[0], switchOptions);
+                switchOptions = {};
+            });
+            $('#btn-check-click').on('click', function () {
+                alert($('#switch-check-click').prop('checked'));
+            });
+            $('#label-check-change').text($('#switch-check-change').prop('checked'));
+            $('#switch-check-change').on('change', function () {
+                $('#label-check-change').text($(this).prop('checked'));
+            });
+        });
+    </script>
+}
