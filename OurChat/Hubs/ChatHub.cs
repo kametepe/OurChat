@@ -45,7 +45,7 @@ namespace OurChat.Hubs
             }
             if (ConnectedUsers.Count(x => x.UniqueID == id) == 0)
             {
-                string UserImg = string.Concat("/images/chat/", member.PicturePath); //GetUserImage(userName);
+                string UserImg = string.Concat("/images/chat/avatar/", member.PicturePath); //GetUserImage(userName);
                 string logintime = DateTime.Now.ToString();
 
                 ConnectedUsers.Add(new ChatUser { UniqueID = id, UserName = fullname, UserImage = UserImg, LoginTime = logintime, ID = mID });

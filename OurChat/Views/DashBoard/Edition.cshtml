@@ -21,23 +21,9 @@ Value = "Mr",
 Text = "Monsieur"
 }
 };
-
-    string imgUrl = string.Empty;
-    if (!string.IsNullOrEmpty(Model.PicturePath))
-    {
-        imgUrl = string.Concat("/assets/media/images/", Model.PicturePath);
-    }
-
-    if (string.IsNullOrEmpty(imgUrl) && Model.ExistingPicture != null)
-    {
-        string img64 = Convert.ToBase64String(Model.ExistingPicture);
-        imgUrl = string.Format("data:" + Model.PicType + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
-    }
-    string avatarPath = string.Concat(hostingEnv.ContentRootPath, "\\wwwroot\\images\\chat\\avatar");
-   // string[] fileArray = System.IO.Directory.GetFiles(avatarPath, "*.png", System.IO.SearchOption.AllDirectories);
-    DirectoryInfo d = new DirectoryInfo(avatarPath);//Assuming Test is your Folder
-    FileInfo[] Files = d.GetFiles("*.png"); //Getting Text files
-    int avatarSelectionCounter = 0;
+ 
+ 
+    
 }
 
 
@@ -110,13 +96,13 @@ Text = "Monsieur"
             <div class="form-group">
                 <label for="signup-email" class="col-sm-3 control-label">Avatar</label>
                 <div class="col-sm-9">
-                    @foreach (FileInfo file in Files)
+                    @for (Int32 i = 0; i < Model.Avatars.Count; i++)
                     {
-                                    
+
                     <div class="account">
                         <div class="user">
-                            <img src="/images/chat/avatar/@file.Name" class="user-picture" alt="">
-                            @if (avatarSelectionCounter == 0)
+                            <img src="/images/chat/avatar/@Model.Avatars[i].PicturePath" class="user-picture" alt="">
+                            @if (Model.Avatars[i].Selected)
                             {
 
                                 <span class="position-number"><i class="fa fa-check"></i></span>
@@ -126,12 +112,13 @@ Text = "Monsieur"
                                 <span class="position-number selection-hidden"></span>
                             }
                         </div>
-
+                        <input type="checkbox" asp-for="@Model.Avatars[i].Selected" />                     
+                        <input type="hidden" asp-for="@Model.Avatars[i].PicturePath" />
                     </div>
-                        avatarSelectionCounter++;
+                        
                     }
 
- 
+
                 </div>
             </div>
 

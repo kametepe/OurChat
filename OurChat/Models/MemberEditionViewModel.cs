@@ -29,7 +29,7 @@ namespace OurChat.Models
         public byte[] ExistingPicture { get; set; }
         public bool IsAdmin { get; set; }
         [DataType(DataType.Upload)]
-        public IFormFile Picture { get; set; }       
-        
+        public IFormFile Picture { get; set; }
+        public List<MemberAvatarViewModel> Avatars { get; set; }
     }
 }

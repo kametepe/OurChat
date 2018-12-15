@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OurChat.Entities;
@@ -14,13 +15,15 @@ namespace OurChat.Controllers
     public class DashBoardController : AdminController
     {
         IConfiguration _Configuration;
+        IHostingEnvironment _hostEnvironment;
         private readonly IMemberService _memberService;
 
 
-        public DashBoardController(IConfiguration configuration, IMemberService memberService)
+        public DashBoardController(IConfiguration configuration, IHostingEnvironment hostEnviron, IMemberService memberService)
         {
             _Configuration = configuration;
             _memberService = memberService;
+            _hostEnvironment = hostEnviron;
         }
 
         public IActionResult Index()
@@ -31,7 +34,10 @@ namespace OurChat.Controllers
 
         public IActionResult Create()
         {
-            MemberEditionViewModel memberViewModel = new MemberEditionViewModel();          
+            MemberEditionViewModel memberViewModel = new MemberEditionViewModel
+            {
+                Avatars = GetMemberAvatars(null)
+            };          
             return View("Edition", memberViewModel);
         }
 
@@ -82,6 +88,7 @@ namespace OurChat.Controllers
             Member member = _memberService.GetMemberByID(id);
             MemberEditionViewModel memberViewModel = new MemberEditionViewModel
             {
+                Avatars = GetMemberAvatars(member),
                 ID = member.ID,
                 Title = member.Title,
                 Fname = member.Fname,
@@ -152,6 +159,24 @@ namespace OurChat.Controllers
                     IsAdmin = member.IsAdmin
                 };
             }
+        }
+
+
+        private List<MemberAvatarViewModel> GetMemberAvatars(Member member)
+        {
+            string avatarPath = string.Concat(_hostEnvironment.ContentRootPath, "\\wwwroot\\images\\chat\\avatar");
+            // string[] fileArray = System.IO.Directory.GetFiles(avatarPath, "*.png", System.IO.SearchOption.AllDirectories);
+            DirectoryInfo d = new DirectoryInfo(avatarPath);//Assuming Test is your Folder
+            FileInfo[] files = d.GetFiles("*.png"); //Getting Text files
+            string selectedAvatar = "a02.png";
+            if(member != null)
+            {
+                selectedAvatar = member.PicturePath;
+            }
+           
+            var avatars = new List<MemberAvatarViewModel>();
+            avatars = files.Select(fl => new MemberAvatarViewModel { PicturePath = fl.Name, Selected = selectedAvatar == fl.Name }).ToList<MemberAvatarViewModel>();
+            return avatars;
         }
     }
 }
